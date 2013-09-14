@@ -12,5 +12,4 @@ other keys are already correctly mapped so it's a tiny patch
 install
 -------
 
-apply the patch to mintty source code (grab from svn) or 
-download already compiled version from Downloads
+apply the patch to mintty source code (grab latest from svn) 
