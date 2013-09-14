@@ -1,0 +1,15 @@
+Index: term.c
+===================================================================
+--- term.c	(revision 1322)
++++ term.c	(working copy)
+@@ -880,8 +880,8 @@
+   if (has_focus != term.has_focus) {
+     term.has_focus = has_focus;
+     term_schedule_cblink();
+-    if (term.report_focus)
+-      child_write(has_focus ? "\e[I" : "\e[O", 3);
++    //if (term.report_focus)
++    //  child_write(has_focus ? "\e[I" : "\e[O", 3);
+   }
+ }
+ 
