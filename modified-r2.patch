@@ -1,0 +1,37 @@
+Index: wininput.c
+===================================================================
+--- wininput.c	(revision 1322)
++++ wininput.c	(working copy)
+@@ -456,6 +456,8 @@
+   void ss3(char c) { ch('\e'); ch('O'); ch(c); }
+   void csi(char c) { ch('\e'); ch('['); ch(c); }
+   void mod_csi(char c) { len = sprintf(buf, "\e[1;%c%c", mods + '1', c); }
++  void mod_csi2(int m, char c) { len = sprintf(buf, "\e[1;%d%c", m, c); }
++  void mod_tilde3(int a, int b, int c) { len = sprintf(buf, "\e[%d;%d;%d~", a,b,c); }
+   void mod_ss3(char c) { mods ? mod_csi(c) : ss3(c); }
+   void tilde_code(uchar code) {
+     len = sprintf(buf, mods ? "\e[%i;%c~" : "\e[%i~", code, mods + '1');
+@@ -506,8 +508,12 @@
+   }
+   
+   void cursor_key(char code, char symbol) {
+-    if (!app_pad_key(symbol))
+-      mods ? mod_csi(code) : term.app_cursor_keys ? ss3(code) : csi(code);
++      if (!app_pad_key(symbol)){
++          if(shift && alt)
++              mod_csi2(10,code);
++          else
++              mods ? mod_csi(code) : term.app_cursor_keys ? ss3(code) : csi(code);
++      }
+   }
+ 
+   // Keyboard layout
+@@ -658,6 +664,8 @@
+         return 0;
+       if (!ctrl)
+         shift ? csi('Z') : ch('\t');
++      else if (ctrl)
++          shift ? mod_tilde3(27,6,9) : mod_tilde3(27,5,9);
+       else if (cfg.switch_shortcuts) {
+         win_switch(shift);
+         return 1;
